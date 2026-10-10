@@ -1,19 +1,48 @@
 # Execution prompt: grounded-chat
 
-Paste-ready start for a build session. Read `CLAUDE.md`, `_reference/methodology.md` and `_reference/architecture.md` first.
+Paste-ready start for a build session. Read `CLAUDE.md`, `_reference/methodology.md` and `_reference/architecture.md` first. This file owns K progress; northstar-react's resume block only points here.
 
 <resume_status>
 Batch: K0 (repo bootstrap). SDK half closed 2026-10-10; northstar-react half open
 Gate: K0 open until the northstar-react half lands
 Last closed: K0 SDK half (CI green on main, 0.0.1 on GitHub Packages, scratch install resolved all 9 subpaths at runtime and in NodeNext types)
-Next: in northstar-react, install 0.0.1 in apps/chatbot, prove the Vercel preview build with NODE_AUTH_TOKEN (closes G-1), take the screenshot baseline of widget, embed, playground and admin tabs. Then K1
+Next: K0's northstar-react half, run in a session started in merlyon-funnel (see "K0, northstar-react half" below). Then K1, started the same way with this repo added
+Waiting on Jan: classic token with read:packages and repo, set as the Actions secret NODE_AUTH_TOKEN in northstar-react and as NODE_AUTH_TOKEN on the chatbot Vercel project (all environments)
 </resume_status>
+
+## Where each batch runs
+
+| Batch | Session started in | Code lands in | Proof runs in |
+| --- | --- | --- | --- |
+| K0 SDK half | this repo | this repo | this repo: CI, publish, scratch install. Done |
+| K0 northstar half | `merlyon-funnel` (northstar-react) | northstar-react: `.npmrc`, pinned dependency, CI env | Vercel preview of `apps/chatbot`; screenshot baseline |
+| K1 to K6 | `merlyon-funnel`, with `claude --add-dir ../grounded-chat` (or `/add-dir` in VS Code) | both: code moves out of `apps/chatbot` into this package, the chatbot imports it | this repo's gate, then the chatbot suite, guard parity and golden transcripts in northstar-react |
+| K7 | this repo | this repo | this repo's gate plus `examples/grounded-kb` on the packed tarball |
+
+Local paths: this repo is `C:\DATEN\Vibecoding\Claude\Code\grounded-chat`, northstar-react is `C:\DATEN\Vibecoding\Claude\Code\merlyon-funnel`. jans-back-bar only waits for `0.1.0` (its M3).
+
+## K0, northstar-react half
+
+1. Root `.npmrc` in northstar-react: `@haeckmec:registry=https://npm.pkg.github.com` and `//npm.pkg.github.com/:_authToken=${NODE_AUTH_TOKEN}`. Never a literal token.
+2. Pin `@haeckmec/grounded-chat` at exactly `0.0.1` in `apps/chatbot`. Nothing imports it yet.
+3. CI hands `NODE_AUTH_TOKEN` from the Actions secret to `npm ci`. (I think granting northstar-react read access in the package settings and using `GITHUB_TOKEN` also works; try it if the secret is missing.)
+4. A Vercel preview of `apps/chatbot` builds with the package from the registry. That closes G-1 here. Fallback: an `npm pack` tarball as a `file:` dependency, about 1 hour.
+5. Screenshot baseline with `verify:screens`: chatbot widget, embed, playground and every admin tab. K5 and K6 compare against it.
+6. Update both resume blocks (this file and northstar-react's `_reference/claude-code-execution-prompt.md`), close G-1 in `gaps.md`, close K0 in `build-history.md`.
+
+Locally, `npm install` in northstar-react needs the token too: a user env var `NODE_AUTH_TOKEN`, or `NODE_AUTH_TOKEN="$(gh auth token)"` per command (the gh login has `read:packages`).
+
+## Cross-repo loop (K1 to K6)
+
+- Iterate with an npm `overrides` entry in northstar-react pointing at the local package. Never commit it.
+- An SDK change lands as: commit here, changeset, version and tag (ask Jan before the tag, it publishes), bump the exact pin in northstar-react, its gate.
+- Each batch commits to both repos separately, with the batch named in both commit messages.
 
 ## Batches
 
 | Batch | Goal | Gate criteria | Status |
 | --- | --- | --- | --- |
-| K0 | Repo, build, lint, CI, release; `0.0.1` installed from the registry by `apps/chatbot` on Vercel; screenshot baseline | SDK gate green on CI; scratch install resolves every subpath; Vercel preview builds; baseline taken | Open |
+| K0 | Repo, build, lint, CI, release; `0.0.1` installed from the registry by `apps/chatbot` on Vercel; screenshot baseline | SDK gate green on CI; scratch install resolves every subpath; Vercel preview builds; baseline taken | SDK half done, northstar half open |
 | K1 | Guard, canaries, LLM ports and adapters; `FigureClass` with `money` default | Golden transcripts recorded first and identical after; guard parity green | Not started |
 | K2 | `runTurn` and the `ChatStore` port | `apps/chatbot` suite unchanged, golden transcripts identical | Not started |
 | K3 | `IntakePlan` | Prompt, tool schema, grounding and dummy NLU read the plan; golden transcripts identical | Not started |
@@ -27,4 +56,4 @@ Next: in northstar-react, install 0.0.1 in apps/chatbot, prove the Vercel previe
 1. Check the current code for the area, in both repos where the batch touches both.
 2. Restate goal and files; wait for Jan's confirmation (skip when started with `/summit`).
 3. Commit by commit, gate before each commit.
-4. At gate close: update `<resume_status>`, append to `build-history.md`, run `/logbook`, stop.
+4. At gate close: update `<resume_status>` here and the pointer in northstar-react, append to `build-history.md`, run `/logbook`, stop.
