@@ -7,8 +7,8 @@ Mode: full. Switch with `/altitude light` only if every full trigger in `_refere
 ## Read before working
 - `_reference/execution-prompt.md`: current batch and gate, resume block.
 - `_reference/methodology.md`: how this repo is built, gated and verified.
-- `_reference/architecture.md`: layers, locked decisions, boundaries, risk register.
-- `_reference/plan.md`: batches K0 to K7, what is not built.
+- `_reference/architecture.md`: layers, failure modes, boundaries, locked decisions.
+- `_reference/plan.md`: the spec. Batches K0 to K7, where each part lives, dev loop, risks, what is not built.
 - `_reference/gaps.md`: what's open. Search it before calling a bug new.
 - `_reference/decisions.md`: calls already made. Don't re-ask them.
 

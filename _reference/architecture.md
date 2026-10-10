@@ -56,15 +56,6 @@ docs/                     quickstart, API notes, consumer handover notes
 
 D-1 to D-9 in `decisions.md` were taken with Jan on 2026-10-10 and are not re-asked: own private repo, package name and registry, 0.x until back-bar ships, extraction now as K0 to K7, intake derived later from the pricing model, SDK ships chat UI and generic admin, CSS variables only, deny-by-default admin, Gemini as the first real adapter.
 
-## Dev loop across two repos
+## Elsewhere
 
-Day to day, `apps/chatbot` points at the local checkout through an npm `overrides` entry that is never committed. Commits only carry a pinned registry version. A kernel fix lands as: SDK commit, changeset, publish, bump in the consumer, consumer gate.
-
-## Risks
-
-- **Registry auth blocks a deploy** (I think about **30%** on the first try). K0 proves it with an empty package. Fallback: a vendored `npm pack` tarball as a `file:` dependency, about 1 hour. Tracked as G-1.
-- **Wrong abstraction from one consumer.** Every kernel API must serve both the quote pack and `examples/grounded-kb` in tests.
-- **Behaviour drift during the move.** Golden transcripts, guard parity and the judge's 120 of 120 catch it. A golden mismatch stops the batch.
-- **IP leakage into a sellable repo.** Domain-word lint, synthetic fixtures only, K7 API review.
-- **Visual regression in the chatbot widget or admin** while moving off Tailwind classes (I think **40%** that K5 needs a second pass on at least one screen). Screenshot baseline from K0; a changed screenshot stops the batch until it matches or Jan accepts it.
-- **Free-tier key** makes the K4 eval re-run slow (15 requests a minute). Costs time, not correctness.
+The dev loop across two repos, the risk register, where each UI and admin part lives and the batch order are in `plan.md`.
