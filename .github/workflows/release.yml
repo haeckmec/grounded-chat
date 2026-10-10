@@ -1,0 +1,37 @@
+name: Release
+
+# Publishes @haeckmec/grounded-chat to GitHub Packages when a version tag is
+# pushed. Flow: `npx changeset version`, commit, then tag `v<version>` on that
+# commit and push the tag.
+
+on:
+  push:
+    tags: ['v*']
+
+permissions:
+  contents: read
+  packages: write
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+          registry-url: https://npm.pkg.github.com
+          scope: '@haeckmec'
+      - name: Tag matches package version
+        run: |
+          version=$(node -p "require('./packages/grounded-chat/package.json').version")
+          if [ "v$version" != "$GITHUB_REF_NAME" ]; then
+            echo "Tag $GITHUB_REF_NAME does not match package version $version" >&2
+            exit 1
+          fi
+      - run: npm ci
+      - run: npx turbo run typecheck lint build test
+      - run: npm publish -w @haeckmec/grounded-chat
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
