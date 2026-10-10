@@ -7,7 +7,7 @@ Batch: K0 (repo bootstrap). SDK half closed 2026-10-10; northstar-react half ope
 Gate: K0 open until the northstar-react half lands
 Last closed: K0 SDK half (CI green on main, 0.0.1 on GitHub Packages, scratch install resolved all 9 subpaths at runtime and in NodeNext types)
 Next: K0's northstar-react half, run in a session started in merlyon-funnel (see "K0, northstar-react half" below). Then K1, started the same way with this repo added
-Waiting on Jan: classic token with read:packages and repo, set as the Actions secret NODE_AUTH_TOKEN in northstar-react and as NODE_AUTH_TOKEN on the chatbot Vercel project (all environments)
+Token: done by Jan 2026-10-10. Classic token set as the Actions secret NODE_AUTH_TOKEN in northstar-react and as NODE_AUTH_TOKEN on the chatbot Vercel project. Nothing waits on Jan
 </resume_status>
 
 ## Where each batch runs
