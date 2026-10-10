@@ -3,10 +3,10 @@
 Paste-ready start for a build session. Read `CLAUDE.md`, `_reference/methodology.md` and `_reference/architecture.md` first.
 
 <resume_status>
-Batch: K0 (repo bootstrap), SDK half in progress
-Gate: K0 open. SDK half done when CI is green on main, 0.0.1 is on GitHub Packages and a scratch install resolves every subpath
-Last closed: none
-Next: publish 0.0.1 (ask Jan first), scratch install with a read:packages token; then the northstar-react half of K0 (install 0.0.1 in apps/chatbot, Vercel build, screenshot baseline, close G-1)
+Batch: K0 (repo bootstrap). SDK half closed 2026-10-10; northstar-react half open
+Gate: K0 open until the northstar-react half lands
+Last closed: K0 SDK half (CI green on main, 0.0.1 on GitHub Packages, scratch install resolved all 9 subpaths at runtime and in NodeNext types)
+Next: in northstar-react, install 0.0.1 in apps/chatbot, prove the Vercel preview build with NODE_AUTH_TOKEN (closes G-1), take the screenshot baseline of widget, embed, playground and admin tabs. Then K1
 </resume_status>
 
 ## Batches

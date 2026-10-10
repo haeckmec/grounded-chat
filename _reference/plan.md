@@ -6,7 +6,7 @@ The spec for this repo. Written in northstar-react (`_reference/General/grounded
 
 | Batch | State |
 | --- | --- |
-| K0, SDK half | Repo, workspaces, turbo, tsup, vitest, lint rules with tests, exports map, changesets, `ci.yml`, `release.yml`, `.npmrc`, docs. CI green on `main`. Left: publish `0.0.1` and a scratch install from the registry |
+| K0, SDK half | Done 2026-10-10: repo, build, lint rules with tests, exports map, changesets, CI and release workflows, docs. `0.0.1` published by release.yml; a scratch install with a read:packages token resolved all 9 subpaths at runtime and in types |
 | K0, northstar-react half | Not started: install `0.0.1` in `apps/chatbot`, Vercel preview build (closes G-1), screenshot baseline |
 | K1 to K7 | Not started |
 
