@@ -15,3 +15,4 @@ export {
   type SweepThrottleOptions,
 } from './limits.js';
 export * from './intake/index.js';
+export * from './judge/index.js';
