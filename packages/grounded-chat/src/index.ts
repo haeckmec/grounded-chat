@@ -14,3 +14,4 @@ export {
   type SweepThrottle,
   type SweepThrottleOptions,
 } from './limits.js';
+export * from './intake/index.js';
