@@ -19,29 +19,30 @@ Set `NODE_AUTH_TOKEN` in your environment (and in CI and your host) to a GitHub 
 npm install --save-exact @haeckmec/grounded-chat
 ```
 
-ESM only, Node 20+. React 19 is an optional peer dependency, needed only for `/react` and `/admin-react`.
+ESM, with a `default` export condition so CommonJS callers can `require` it on Node 20.19+. React 19 is an optional peer dependency, needed only for `/react` and `/admin-react`.
 
 ## Subpaths
 
 | Import | What it holds |
 | --- | --- |
-| `@haeckmec/grounded-chat` | Turn engine, figure guard, grounding check, intake plan, judge, types. No fetch, env or fs |
-| `@haeckmec/grounded-chat/adapters/gemini` | Gemini LLM adapter |
-| `@haeckmec/grounded-chat/adapters/dummy` | Scripted adapter for tests and examples |
-| `@haeckmec/grounded-chat/http` | Rate limit, origin check, message cap, token budget, client IP |
-| `@haeckmec/grounded-chat/client` | SSE reader, embed parameter parsing, contrast helper. No React |
-| `@haeckmec/grounded-chat/react` | `useGroundedChat()`, chat primitives, `<ChatWidget>`, `<Playground>` |
-| `@haeckmec/grounded-chat/admin` | Admin handlers, each behind the host's `authorize` callback |
-| `@haeckmec/grounded-chat/admin-react` | Admin panels |
-| `@haeckmec/grounded-chat/eval` | Judge eval, latency and second-grader runners, small CLI |
+| `@haeckmec/grounded-chat` | `runTurn` and `TurnPack`, the figure guard (`moneyFigures`, `measureFigures`), `ChatStore`, `IntakePlan`, the judge and `scoreReply`, canaries, `LlmPort` and its contract. No fetch, env or fs |
+| `@haeckmec/grounded-chat/adapters/gemini` | `GeminiLlmAdapter` |
+| `@haeckmec/grounded-chat/adapters/dummy` | `DummyLlmAdapter`, a scripted adapter a pack drives with its own script |
+| `@haeckmec/grounded-chat/http` | Rate limit, origin check, client key, `guardPublicRequest`, message cap, token budget |
+| `@haeckmec/grounded-chat/client` | SSE reader, embed parameter parsing, contrast helper, web font list. No React |
+| `@haeckmec/grounded-chat/react` | `useGroundedChat()`, `<ChatWidget>`, `<Playground>`, the default stylesheet |
+| `@haeckmec/grounded-chat/admin` | Config, transcript, prune and stats handlers, each behind the host's `authorize`; `ConfigStore` |
+| `@haeckmec/grounded-chat/admin-react` | Admin shell and panels: Conversation, Model, compliance and theme, transcripts |
+| `@haeckmec/grounded-chat/eval` | Labelled-set grading, agreement, latency summaries, a timed port |
 
-In 0.0.x every subpath resolves and exports nothing yet.
+Start with [docs/quickstart.md](docs/quickstart.md). [docs/api.md](docs/api.md) walks through every subpath, [docs/ui-css-variables.md](docs/ui-css-variables.md) covers styling, [docs/consumers.md](docs/consumers.md) says how Quoteproof and Jan's Back Bar use it, and [examples/grounded-kb](examples/grounded-kb) is a complete pack to copy.
 
 ## Develop
 
 ```
 npm install
 npx turbo run typecheck lint build test
+npm run check:packed   # the example on the packed tarball, as an outside app installs it
 ```
 
 `CLAUDE.md` holds the repo rules; `_reference/` holds the plan, architecture and decisions.

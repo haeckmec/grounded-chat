@@ -1,5 +1,47 @@
 # @haeckmec/grounded-chat
 
+## 0.1.0
+
+### Minor Changes
+
+- 84973b2: 0.1.0, the first published release. `measureFigures` and `findMeasureSpans`: a figure class for volumes, dashes and drops, parts and percent strength, for packs whose facts are specs and ratios. Every export now carries a doc comment, enforced by an API review test. `examples/grounded-kb` is a complete second pack (tools, measures, a one-slot intake plan, its own judge verdict, server, widget and admin on the dummy adapter), and `npm run check:packed` runs it on the packed tarball outside the workspace, in CI and before every publish.
+
+## 0.0.7
+
+### Patch Changes
+
+- cc04ec3: Admin. `/admin`: `createConfigHandlers` (GET and PUT with ETag and If-Match, 409 on a concurrent change), `createTranscriptHandler`, `createPruneHandler` and `createStatsHandler` on Web `Request` and `Response`, each refusing with 401 unless the host's `authorize` returns true; the `ConfigStore` port with `InMemoryConfigStore` and `configStoreContractCases`; `findSecretShapedKeys` and `SECRET_KEY_PATTERN`; `coerceLocalizedText` and `coerceLocalizedList`. `/admin-react`: `AdminShell`, `ConversationPanel`, `ModelPanel`, `ComplianceThemePanel` (retention and theme generic, compliance copy and toggles from the pack), `TranscriptView` with `loadTranscript`, `useConfigPanel`, `InfoTooltip`, `LanguageToggle`, `LoadingPlaceholder`, `SaveRow`, all styled through `AdminClassNamesProvider`.
+
+## 0.0.6
+
+### Patch Changes
+
+- 86c024d: Chat UI. `/client`: `readServerSentEvents`, `parseEmbedParams` with `isValidOrigin` and `sanitizeHexColor`, `contrastTextColor`, `FONT_OPTIONS` with `findFontOption` and `googleFontsHref`. `/react`: `useGroundedChat` (streaming state, custom messages from named events, reset and abort), `ChatWidget` (header, language switch, transcript with a renderer map, starter and suggested replies, composer, toast) styled only through `classNames` slots and CSS variables, `GroundedChatStyles` and `GROUNDED_CHAT_CSS`, `DEFAULT_WIDGET_STRINGS` and `FRENCH_WIDGET_STRINGS`, `Playground` and `PlaygroundStats`. The UI takes the host's `fetch`, so the package makes no network call of its own.
+
+## 0.0.5
+
+### Patch Changes
+
+- 9e55c83: Judge and eval. `runJudge` grades a reply with pack-defined verdicts (`JudgeSpec`: preamble, `VerdictDefinition`s, closing, headings); `judgeInstructions`, `judgeResponseSchema`, `judgeUserMessage` and `parseJudgeReply` expose each step, and `defaultVerdicts(scope)` is a reusable set (unsupported claim, off-topic, leaked instructions). `scoreReply` scores a reply from the leak check, the canaries and the verdicts. `/eval` ships `gradeEvalSet`, `agreement`, `percentile`, `summariseLatency`, `timedPort` and `refuseInCi`. Every subpath now also has a `default` export condition, so CommonJS callers (tsx scripts) can require the ESM build; the Node floor is 20.19.
+
+## 0.0.4
+
+### Patch Changes
+
+- 69c5b63: `IntakePlan`: ordered slots (`id`, `label`, `askHint`, `required`, `when`, `quickReplies`) and a completion tool. `intakePromptLines` compiles the prompt's question order and own-words rule, `userWordsSchema` the completion tool's user's-words argument, `unstatedSlots` the grounding check (every value the model passes must be in the user's own words), and `nextMissingSlot` and `applicableSlots` the order a scripted adapter asks in.
+
+## 0.0.3
+
+### Patch Changes
+
+- 3f1ab75: The turn engine and the store port. `runTurn` runs one chat turn for a `TurnPack` (tools, system prompt, tool executor, figure rule, no-answer reply): the tool loop, the figure guard on every streamed piece, one 503 retry before any text, message cap, token budget, retention sweep and metrics. Tools return `ToolOutcome` (`payload`, `authorizedFigures`, `snapshot`). `ChatStore` is the storage port with `InMemoryChatStore` and the framework-free `chatStoreContractCases`. `createSweepThrottle`, `isMessageCapExceeded` and `isTokenBudgetExceeded` are exported. `/http` ships `createFixedWindowRateLimiter`, `isOriginAllowed`, `parseOriginAllowlist`, `clientKey` and `guardPublicRequest` on Web `Request` and `Response`.
+
+## 0.0.2
+
+### Patch Changes
+
+- cb6b57b: The figure guard, canaries and the model port arrive in the core: `stripUnauthorizedNumbers`, `StreamingNumberGuard`, `findLeaks` and `hasLeak` read figures through a `FigureClass` (`moneyFigures` is the default and behaves exactly as before), and take the replacement text from the pack (`DEFAULT_REPLACEMENTS` for English and French). `createCanaries` plants and finds reference codes. `LlmPort`, `streamTurn`, `LlmProviderError` and `llmPortContractCases`, the framework-free contract any adapter runs. `/adapters/gemini` ships `GeminiLlmAdapter`; `/adapters/dummy` ships a scripted `DummyLlmAdapter` a pack drives with its own script.
+
 ## 0.0.1
 
 ### Patch Changes

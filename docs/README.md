@@ -1,3 +1,6 @@
 # Docs
 
-Quickstart, API notes and consumer handover notes land here as the API takes shape. Until then, the repo `README.md` covers install and the subpath list.
+- [quickstart.md](quickstart.md): a grounded chat running in an hour, on the dummy adapter first.
+- [api.md](api.md): every subpath and what it is for.
+- [ui-css-variables.md](ui-css-variables.md): styling the widget and admin panels.
+- [consumers.md](consumers.md): how Quoteproof and Jan's Back Bar consume the package.

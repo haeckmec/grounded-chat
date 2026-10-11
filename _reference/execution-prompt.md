@@ -3,11 +3,10 @@
 Paste-ready start for a build session. Read `CLAUDE.md`, `_reference/methodology.md` and `_reference/architecture.md` first. This file owns K progress; northstar-react's resume block only points here.
 
 <resume_status>
-Batch: K0 (repo bootstrap). SDK half closed 2026-10-10; northstar-react half open
-Gate: K0 open until the northstar-react half lands
-Last closed: K0 SDK half (CI green on main, 0.0.1 on GitHub Packages, scratch install resolved all 9 subpaths at runtime and in NodeNext types)
-Next: K0's northstar-react half, run in a session started in merlyon-funnel (see "K0, northstar-react half" below). Then K1, started the same way with this repo added
-Token: done by Jan 2026-10-10. Classic token set as the Actions secret NODE_AUTH_TOKEN in northstar-react and as NODE_AUTH_TOKEN on the chatbot Vercel project. Nothing waits on Jan
+Batch: none. K0 to K7 built 2026-10-11 in one unattended run, branch claude/relaxed-edison-p16bop of both repos, not merged
+Gate: K7 closed in code. Tag v0.1.0 not pushed: the cloud session's git proxy refuses tags. Jan pushes it (git tag -a v0.1.0 on the branch head, git push origin v0.1.0); release.yml then runs the gate, check:packed and the publish
+Last closed: K7 (measure figures, grounded-kb example on the packed tarball, API review, docs, 0.1.0)
+Next: Jan reviews and merges both branches. Then G-1 (registry pin, needs a read:packages session), G-3 (live judge re-run, dev key), G-2 (root gate locally). Back-bar M3 may start on 0.1.0
 </resume_status>
 
 ## Where each batch runs
@@ -42,14 +41,14 @@ Locally, `npm install` in northstar-react needs the token too: a user env var `N
 
 | Batch | Goal | Gate criteria | Status |
 | --- | --- | --- | --- |
-| K0 | Repo, build, lint, CI, release; `0.0.1` installed from the registry by `apps/chatbot` on Vercel; screenshot baseline | SDK gate green on CI; scratch install resolves every subpath; Vercel preview builds; baseline taken | SDK half done, northstar half open |
-| K1 | Guard, canaries, LLM ports and adapters; `FigureClass` with `money` default | Golden transcripts recorded first and identical after; guard parity green | Not started |
-| K2 | `runTurn` and the `ChatStore` port | `apps/chatbot` suite unchanged, golden transcripts identical | Not started |
-| K3 | `IntakePlan` | Prompt, tool schema, grounding and dummy NLU read the plan; golden transcripts identical | Not started |
-| K4 | Judge runner, eval runners | Labelled set 120 of 120 | Not started |
-| K5 | `/client`, `/react` chat UI | Chatbot e2e green; screenshots match the K0 baseline | Not started |
-| K6 | `/admin`, `/admin-react` | Refusal test per handler; screenshots match the baseline | Not started |
-| K7 | `measure`, `examples/grounded-kb`, quickstart, API review, `0.1.0` | Example runs on the packed tarball; every export documented and tested; no APRIL data | Not started |
+| K0 | Repo, build, lint, CI, release; `0.0.1` installed from the registry by `apps/chatbot` on Vercel; screenshot baseline | SDK gate green on CI; scratch install resolves every subpath; Vercel preview builds; baseline taken | Done (vendored tarball, D-17; G-1 waits) |
+| K1 | Guard, canaries, LLM ports and adapters; `FigureClass` with `money` default | Golden transcripts recorded first and identical after; guard parity green | Done, 0.0.2 |
+| K2 | `runTurn` and the `ChatStore` port | `apps/chatbot` suite unchanged, golden transcripts identical | Done, 0.0.3 |
+| K3 | `IntakePlan` | Prompt, tool schema, grounding and dummy NLU read the plan; golden transcripts identical | Done, 0.0.4 |
+| K4 | Judge runner, eval runners | Labelled set 120 of 120 | Done, 0.0.5 (golden proof, D-19; live re-run G-3) |
+| K5 | `/client`, `/react` chat UI | Chatbot e2e green; screenshots match the K0 baseline | Done, 0.0.6 |
+| K6 | `/admin`, `/admin-react` | Refusal test per handler; screenshots match the baseline | Done, 0.0.7 |
+| K7 | `measure`, `examples/grounded-kb`, quickstart, API review, `0.1.0` | Example runs on the packed tarball; every export documented and tested; no APRIL data | Done, 0.1.0 |
 
 ## How to run a gate
 

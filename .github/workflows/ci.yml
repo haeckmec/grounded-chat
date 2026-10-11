@@ -28,3 +28,5 @@ jobs:
           cache: npm
       - run: npm ci
       - run: npx turbo run typecheck lint build test
+      # The example installs the packed tarball outside the workspace, as a consumer would.
+      - run: npm run check:packed
