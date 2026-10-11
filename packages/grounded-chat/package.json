@@ -1,6 +1,6 @@
 {
   "name": "@haeckmec/grounded-chat",
-  "version": "0.0.6",
+  "version": "0.0.7",
   "description": "Grounded chat SDK: an LLM chat that only states figures and facts the host app's own tools returned.",
   "license": "UNLICENSED",
   "type": "module",
