@@ -16,3 +16,20 @@ What each gate closed and the standing rules it taught. Newest at the bottom.
 ## 2026-10-11 · K2
 - Closed: `runTurn` with `TurnPack` hooks, `ChatStore` with `InMemoryChatStore` and `chatStoreContractCases` (the chatbot's libsql repo passes it), `/http` guards on Web `Request`/`Response`, sweep throttle. Chatbot turn suite unchanged, golden transcripts identical, 11 screens byte-identical. 0.0.3.
 - Northstar root gate: 35 of 36 tasks green; `api#test` fails only where a PDF renders, for want of Playwright's pinned headless shell in the container (G-2). K touches no api code.
+
+## 2026-10-11 · K3
+- Closed: `IntakePlan` with `intakePromptLines`, `userWordsSchema`, `unstatedSlots`, `nextMissingSlot`, `applicableSlots`. The chatbot's four rating dimensions are its plan; prompt, tool schema, grounding, dummy questions and quick replies read it, and the golden transcripts (which record prompt and schema) are identical. 0.0.4. `runTurn` takes no policy (D-22).
+
+## 2026-10-11 · K4
+- Closed: `JudgeSpec` with pack-defined verdicts, `runJudge` and its steps, `defaultVerdicts`, `scoreReply`; `/eval` runners. The chatbot's judge wording is unchanged; a golden of every labelled item's request and of the reply parsing, recorded before the move, is identical (D-19). 0.0.5.
+- Found: the import-only exports map broke the chatbot's `tsx` scripts from K1 on (CommonJS require). Every subpath now has a `default` condition; the example tests requiring the build.
+
+## 2026-10-11 · K5
+- Closed: `/client` (SSE reader, embed parsing, contrast, fonts) and `/react` (`useGroundedChat`, `ChatWidget` with renderer map and `className` slots, default stylesheet on CSS variables, `Playground`, `PlaygroundStats`). The UI takes the host's `fetch` (D-23). The chatbot passes its Tailwind classes into the slots: all 11 screens byte-identical, Playwright 5 of 5. `docs/ui-css-variables.md` is the UI standard. 0.0.6.
+
+## 2026-10-11 · K6
+- Closed: `/admin` handlers (config with ETag and If-Match, transcript, prune, stats), each refusing with 401 unless `authorize` returns true, tested five ways per handler; `ConfigStore` and its contract; `/admin-react` shell and panels through one class map. The chatbot's admin routes and three tabs run on them; screens byte-identical. 0.0.7.
+
+## 2026-10-11 · K7
+- Closed: `measureFigures` with streaming parity at every cut; `examples/grounded-kb` (tools, measures, one-slot plan, own verdict, server, widget, admin) as the second consumer of every kernel API; `npm run check:packed` runs it on the packed tarball outside the workspace, in CI and in the release workflow; the API review test (doc comment on every export, a test for every runtime export); quickstart, API notes, consumer notes. Guard tests copied from the chatbot rewritten with neutral figures and wording. No CLI in `/eval` (D-24). 0.1.0.
+- Standing rules learned: a vendored bump is a hand-patched lockfile entry (version, resolved, integrity) to avoid npm-version churn; the example must declare every type package it uses, the packed check finds what workspace hoisting hides.
