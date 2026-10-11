@@ -3,10 +3,10 @@
 Paste-ready start for a build session. Read `CLAUDE.md`, `_reference/methodology.md` and `_reference/architecture.md` first. This file owns K progress; northstar-react's resume block only points here.
 
 <resume_status>
-Batch: none. K0 to K7 built 2026-10-11 in one unattended run, branch claude/relaxed-edison-p16bop of both repos, not merged
-Gate: K7 closed in code. Tag v0.1.0 not pushed: the cloud session's git proxy refuses tags. Jan pushes it (git tag -a v0.1.0 on the branch head, git push origin v0.1.0); release.yml then runs the gate, check:packed and the publish
+Batch: none. K0 to K7 built 2026-10-11 and merged to main (ac48938)
+Gate: closed. 0.1.0 published 2026-10-11: v0.1.0 tagged at ac48938, release.yml run 38145585303 green, package listed under GitHub Packages
 Last closed: K7 (measure figures, grounded-kb example on the packed tarball, API review, docs, 0.1.0)
-Next: Jan reviews and merges both branches. Then G-1 (registry pin, needs a read:packages session), G-3 (live judge re-run, dev key), G-2 (root gate locally). Back-bar M3 may start on 0.1.0
+Next: northstar-react G-1 (registry pin), G-2 (root gate), G-3 (live judge), G-4 (e2e race). Back-bar M3 may start on 0.1.0
 </resume_status>
 
 ## Where each batch runs

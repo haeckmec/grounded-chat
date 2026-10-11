@@ -33,3 +33,7 @@ What each gate closed and the standing rules it taught. Newest at the bottom.
 ## 2026-10-11 · K7
 - Closed: `measureFigures` with streaming parity at every cut; `examples/grounded-kb` (tools, measures, one-slot plan, own verdict, server, widget, admin) as the second consumer of every kernel API; `npm run check:packed` runs it on the packed tarball outside the workspace, in CI and in the release workflow; the API review test (doc comment on every export, a test for every runtime export); quickstart, API notes, consumer notes. Guard tests copied from the chatbot rewritten with neutral figures and wording. No CLI in `/eval` (D-24). 0.1.0.
 - Standing rules learned: a vendored bump is a hand-patched lockfile entry (version, resolved, integrity) to avoid npm-version churn; the example must declare every type package it uses, the packed check finds what workspace hoisting hides.
+
+## 2026-10-11 · 0.1.0 published
+- Closed: local gate on ac48938 green (9 of 9 turbo tasks, 255 package tests, 33 example tests, `check:packed`). Jan approved the one tag; `v0.1.0` pushed at ac48938. release.yml run 38145585303 passed in 57s (its own gate, `check:packed`, `npm publish`). `@haeckmec/grounded-chat` 0.1.0 is listed under GitHub Packages for the haeckmec user, published 14:03 UTC.
+- Open: northstar-react still installs the vendored tarball (G-1). The shell that ran this had no `NODE_AUTH_TOKEN`, so the registry install waits for a shell that has it.
