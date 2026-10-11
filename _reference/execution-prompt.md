@@ -3,11 +3,11 @@
 Paste-ready start for a build session. Read `CLAUDE.md`, `_reference/methodology.md` and `_reference/architecture.md` first. This file owns K progress; northstar-react's resume block only points here.
 
 <resume_status>
-Batch: K0 (repo bootstrap). SDK half closed 2026-10-10; northstar-react half open
-Gate: K0 open until the northstar-react half lands
-Last closed: K0 SDK half (CI green on main, 0.0.1 on GitHub Packages, scratch install resolved all 9 subpaths at runtime and in NodeNext types)
-Next: K0's northstar-react half, run in a session started in merlyon-funnel (see "K0, northstar-react half" below). Then K1, started the same way with this repo added
-Token: done by Jan 2026-10-10. Classic token set as the Actions secret NODE_AUTH_TOKEN in northstar-react and as NODE_AUTH_TOKEN on the chatbot Vercel project. Nothing waits on Jan
+Batch: K3 (IntakePlan). K0 to K2 closed 2026-10-11 in one unattended run on branch claude/relaxed-edison-p16bop of both repos
+Gate: K3 open
+Last closed: K2 (runTurn and ChatStore; chatbot turn suite and golden transcripts unchanged on 0.0.3)
+Next: K3, then K4 to K7 in the same run (Jan, 2026-10-11: build through, ask questions up front)
+Install path: vendored tarball in apps/chatbot/vendor (D-17); one publish, v0.1.0 at K7 (D-18). G-1, G-2, G-3 wait on a token, a local run and the dev key
 </resume_status>
 
 ## Where each batch runs
@@ -42,9 +42,9 @@ Locally, `npm install` in northstar-react needs the token too: a user env var `N
 
 | Batch | Goal | Gate criteria | Status |
 | --- | --- | --- | --- |
-| K0 | Repo, build, lint, CI, release; `0.0.1` installed from the registry by `apps/chatbot` on Vercel; screenshot baseline | SDK gate green on CI; scratch install resolves every subpath; Vercel preview builds; baseline taken | SDK half done, northstar half open |
-| K1 | Guard, canaries, LLM ports and adapters; `FigureClass` with `money` default | Golden transcripts recorded first and identical after; guard parity green | Not started |
-| K2 | `runTurn` and the `ChatStore` port | `apps/chatbot` suite unchanged, golden transcripts identical | Not started |
+| K0 | Repo, build, lint, CI, release; `0.0.1` installed from the registry by `apps/chatbot` on Vercel; screenshot baseline | SDK gate green on CI; scratch install resolves every subpath; Vercel preview builds; baseline taken | Done (vendored tarball, D-17; G-1 waits) |
+| K1 | Guard, canaries, LLM ports and adapters; `FigureClass` with `money` default | Golden transcripts recorded first and identical after; guard parity green | Done, 0.0.2 |
+| K2 | `runTurn` and the `ChatStore` port | `apps/chatbot` suite unchanged, golden transcripts identical | Done, 0.0.3 |
 | K3 | `IntakePlan` | Prompt, tool schema, grounding and dummy NLU read the plan; golden transcripts identical | Not started |
 | K4 | Judge runner, eval runners | Labelled set 120 of 120 | Not started |
 | K5 | `/client`, `/react` chat UI | Chatbot e2e green; screenshots match the K0 baseline | Not started |
