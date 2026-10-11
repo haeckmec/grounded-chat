@@ -10,6 +10,7 @@ export interface ChatSession {
 /** Who wrote a persisted message. Tool rounds are never persisted, only what the user saw. */
 export type StoredMessageRole = 'user' | 'assistant';
 
+/** One persisted message, as the store lists it. */
 export interface StoredMessage {
   role: StoredMessageRole;
   content: string;

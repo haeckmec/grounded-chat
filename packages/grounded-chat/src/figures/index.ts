@@ -5,6 +5,7 @@ export {
   type GuardOptions,
 } from './figure-class.js';
 export { AMOUNT_WORDS, findAmountSpans, moneyFigures } from './money.js';
+export { findMeasureSpans, measureFigures } from './measure.js';
 export {
   findLeaks,
   hasLeak,

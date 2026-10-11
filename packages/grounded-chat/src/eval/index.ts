@@ -18,6 +18,7 @@ export interface EvalItem<C extends string = string> {
 /** One grader's verdicts per item id; null where it could not grade. */
 export type Grades<C extends string = string> = Record<string, Record<C, boolean> | null>;
 
+/** Options for `gradeEvalSet`. */
 export interface GradeSetOptions<C extends string> {
   items: ReadonlyArray<EvalItem<C>>;
   /** Grades one item; null when it could not. */
@@ -68,6 +69,7 @@ export interface CategoryAgreement {
   falseAlarm: string[];
 }
 
+/** The result of `agreement`: per category, overall, the ungraded items, and printable lines. */
 export interface AgreementReport {
   categories: CategoryAgreement[];
   match: number;

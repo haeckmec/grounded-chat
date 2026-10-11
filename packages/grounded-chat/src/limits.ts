@@ -14,6 +14,7 @@ export interface SweepThrottle {
   maybeRun(run: () => Promise<unknown>): Promise<void>;
 }
 
+/** Options for `createSweepThrottle`. */
 export interface SweepThrottleOptions {
   /** One hour when absent. */
   intervalMs?: number;

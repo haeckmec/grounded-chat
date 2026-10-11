@@ -2,21 +2,21 @@ import { describe, expect, it } from "vitest";
 import { stripUnauthorizedNumbers } from "../../src/index.js";
 import { StreamingNumberGuard } from "../../src/index.js";
 
-const AUTHORIZED = [1676, 1325, 321.36, 9.64, 80];
+const AUTHORIZED = [1480, 1210, 288.14, 8.64, 80];
 
 // Every class of amount the span finder knows, authorized and not, plus the near misses it must leave alone.
 const REPLIES = [
-  "Your indicative annual premium is 1676.00 EUR.",
+  "Your indicative annual price is 1480.00 EUR.",
   "With a discount it would be 1500 EUR, so roughly 1,500.00.",
   "Roughly 1700 for the year, or €900 if you push.",
-  "The price in words: one thousand six hundred seventy-six euros.",
-  "Environ mille sept cents euros, soit 1 676,00 €.",
+  "The price in words: one thousand four hundred eighty euros.",
+  "Environ mille sept cents euros, soit 1 480,00 €.",
   "It covers 150 countries and 365 days, 100 % of costs.",
-  "Cinq pour cent de remise sur 1325.00 EUR.",
+  "Cinq pour cent de remise sur 1210.00 EUR.",
   "A 100 per cent refund, or 200 pour cent.",
   "Private room is capped at 80.00 EUR per day, a hundred and fifty at most.",
   "For 2 adults aged 22 and 35, starting in 2026.",
-  "Healthcare 1325.00, assistance 321.36, tax 9.64. Total 1676.00 EUR",
+  "Healthcare 1210.00, assistance 288.14, tax 8.64. Total 1480.00 EUR",
   "Ninety-nine euros a month, or 99.99.",
   "Call it 1700",
   "Under COVID-19 rules, cover applies 24/7 at 203.0.113.9.",
@@ -105,8 +105,8 @@ describe("StreamingNumberGuard", () => {
 
   it("releases an authorized figure as written once the word after it settles it", () => {
     const guard = new StreamingNumberGuard(AUTHORIZED);
-    expect(guard.push("Total 1676.")).toBe("Total ");
-    expect(guard.push("00 EUR for ")).toBe("1676.00 EUR for ");
+    expect(guard.push("Total 1480.")).toBe("Total ");
+    expect(guard.push("00 EUR for ")).toBe("1480.00 EUR for ");
   });
 
   it("releases plain prose at once, holding back only the last word while it may grow", () => {

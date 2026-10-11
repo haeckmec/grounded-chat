@@ -18,6 +18,7 @@ export interface CustomMessageView<D = unknown> {
   streamId?: number | undefined;
 }
 
+/** Any message on screen: text, or a custom message a pack renders. */
 export type ChatMessageView = TextMessageView | CustomMessageView;
 
 /** The `done` event's payload. */
@@ -27,6 +28,7 @@ export interface ChatDoneEvent {
   suggestedReplies?: QuickReply[] | undefined;
 }
 
+/** Options for `useGroundedChat`. */
 export interface UseGroundedChatOptions {
   /** The host's streaming chat endpoint; `/api/chat` when absent. */
   endpoint?: string;
@@ -52,6 +54,7 @@ export interface UseGroundedChatOptions {
   fetch: typeof fetch;
 }
 
+/** The chat state and actions `useGroundedChat` returns. */
 export interface GroundedChat {
   messages: ChatMessageView[];
   sessionId: string | undefined;

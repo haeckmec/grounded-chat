@@ -13,6 +13,7 @@ import {
   type ToolSchema,
 } from '../../llm/port.js';
 
+/** The Gemini adapter's settings. The key comes from the host's environment, never from config. */
 export interface GeminiAdapterConfig {
   apiKey: string;
   model?: string;

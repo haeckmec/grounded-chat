@@ -14,8 +14,8 @@ function streamOf(text: string, chunkSize: number): ReadableStream<Uint8Array> {
 }
 
 const STREAM =
-  'event: quote\ndata: {"familyQuote":{"total":1676}}\n\n' +
-  'event: delta\ndata: {"text":"Votre prime est de 1 676,00 € é"}\n\n' +
+  'event: card\ndata: {"card":{"total":1480}}\n\n' +
+  'event: delta\ndata: {"text":"Votre prime est de 1 480,00 € é"}\n\n' +
   'event: done\ndata: {"sessionId":"s1"}\n\n';
 
 describe("readServerSentEvents", () => {
@@ -24,8 +24,8 @@ describe("readServerSentEvents", () => {
       const events = [];
       for await (const event of readServerSentEvents(streamOf(STREAM, chunkSize))) events.push(event);
       expect(events, `chunk size ${chunkSize}`).toEqual([
-        { event: "quote", data: { familyQuote: { total: 1676 } } },
-        { event: "delta", data: { text: "Votre prime est de 1 676,00 € é" } },
+        { event: "card", data: { card: { total: 1480 } } },
+        { event: "delta", data: { text: "Votre prime est de 1 480,00 € é" } },
         { event: "done", data: { sessionId: "s1" } },
       ]);
     }

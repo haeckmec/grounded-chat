@@ -17,13 +17,13 @@ import type { FigureClass, FigureSpan } from './figure-class.js';
 const CURRENCY_WORD = 'EUR|USD|GBP|euros?|dollars?|pounds?';
 
 // Grouped thousands (comma, dot, space, or the no-break spaces French formatting uses) come first so
-// "1 676,00" is read as one figure; a plain run of digits with an optional decimal mark is the rest.
+// "1 480,00" is read as one figure; a plain run of digits with an optional decimal mark is the rest.
 const NUMBER_CORE = String.raw`\d{1,3}(?:[,.\u0020\u00a0\u202f]\d{3})+(?:[.,]\d{1,2})?|\d+(?:[.,]\d{1,2})?`;
 
 // The lookarounds keep digits inside a longer token out: codes ("COVID-19", "PLAN-01"), addresses
 // ("203.0.113.9", "localhost:4000"), colours ("#18181b"), ranges of codes ("3166-1") and encoded text
 // ("%23"). A letter straight after the digits ("0.299r") is a token too, unless it starts a currency
-// code ("1676EUR").
+// code ("1480EUR").
 const DIGIT_AMOUNT = new RegExp(
   String.raw`(?<![\p{L}\d_\-.:/@#%])([€$£]\s?)?(${NUMBER_CORE})(?![.,]?\d|-\d|_)(?:(\s?(?:[€$£]|(?:${CURRENCY_WORD})\b))|(?!\p{L}))`,
   'giu',

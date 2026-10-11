@@ -48,7 +48,7 @@ const call = (id: string, city: string, age = 22) => ({ id, name: 'lookup_record
 const say = (text: string): Round => ({ texts: [text], turn: { reply: text } });
 const tools = (...calls: ReturnType<typeof call>[]): Round => ({ texts: [], turn: { toolCalls: calls } });
 
-const TOTALS: Record<string, number> = { Lisbon: 1676, Porto: 900 };
+const TOTALS: Record<string, number> = { Lisbon: 1480, Porto: 900 };
 
 function pack(overrides: Partial<TurnPack<Record_>> = {}): TurnPack<Record_> {
   return {
@@ -84,13 +84,13 @@ async function turn(options: Partial<RunTurnOptions<Record_>> & { llm: LlmPort; 
 
 describe('runTurn', () => {
   it('runs the tool loop: the result goes back to the model, which then answers with the returned figure', async () => {
-    const llm = scripted([tools(call('c1', 'Lisbon')), say('The record says 1676.00 EUR.')]);
+    const llm = scripted([tools(call('c1', 'Lisbon')), say('The record says 1480.00 EUR.')]);
     const { result, deltas, store, sessionId } = await turn({ llm });
-    expect(result.reply).toBe('The record says 1676.00 EUR.');
+    expect(result.reply).toBe('The record says 1480.00 EUR.');
     expect(deltas.join('')).toBe(result.reply);
-    expect(llm.requests[1]).toContainEqual({ role: 'tool', toolCallId: 'c1', name: 'lookup_record', content: '{"city":"Lisbon","total":1676}' });
-    expect(result.snapshotsThisTurn).toEqual([{ key: 'Lisbon', value: { city: 'Lisbon', total: 1676 } }]);
-    expect(await store.listSnapshots(sessionId)).toEqual([{ city: 'Lisbon', total: 1676 }]);
+    expect(llm.requests[1]).toContainEqual({ role: 'tool', toolCallId: 'c1', name: 'lookup_record', content: '{"city":"Lisbon","total":1480}' });
+    expect(result.snapshotsThisTurn).toEqual([{ key: 'Lisbon', value: { city: 'Lisbon', total: 1480 } }]);
+    expect(await store.listSnapshots(sessionId)).toEqual([{ city: 'Lisbon', total: 1480 }]);
     expect(result.metrics).toMatchObject({ llmRoundTrips: 2, toolCalls: 1, narratedLocally: false, providerRetries: 0 });
   });
 
@@ -104,17 +104,17 @@ describe('runTurn', () => {
   it('keeps figures a tool returned authorized on later turns of the session', async () => {
     const store = new InMemoryChatStore<Record_>();
     const { sessionId } = await turn({ llm: scripted([tools(call('c1', 'Lisbon')), say('Done.')]), store });
-    const { result } = await turn({ llm: scripted([say('As I said, 1676.00 EUR.')]), store, sessionId }, 'remind me');
-    expect(result.reply).toBe('As I said, 1676.00 EUR.');
-    expect(await store.listAuthorizedFigures(sessionId)).toEqual([1676]);
+    const { result } = await turn({ llm: scripted([say('As I said, 1480.00 EUR.')]), store, sessionId }, 'remind me');
+    expect(result.reply).toBe('As I said, 1480.00 EUR.');
+    expect(await store.listAuthorizedFigures(sessionId)).toEqual([1480]);
   });
 
   it('lets the pack compute the authorized figures from the snapshots', async () => {
-    const llm = scripted([tools(call('c1', 'Lisbon'), call('c2', 'Porto')), say('Together 2576.00 EUR.')]);
+    const llm = scripted([tools(call('c1', 'Lisbon'), call('c2', 'Porto')), say('Together 2380.00 EUR.')]);
     const authorizedFigures = vi.fn(({ snapshots }: { snapshots: Record_[] }) => [snapshots.reduce((sum, s) => sum + s.total, 0)]);
     const { result } = await turn({ llm, pack: pack({ authorizedFigures }) });
-    expect(result.reply).toBe('Together 2576.00 EUR.');
-    expect(result.guard?.authorizedAmounts).toEqual([2576]);
+    expect(result.reply).toBe('Together 2380.00 EUR.');
+    expect(result.guard?.authorizedAmounts).toEqual([2380]);
   });
 
   it('replaces a keyed snapshot within the turn and does not save a reused one twice', async () => {
@@ -125,7 +125,7 @@ describe('runTurn', () => {
       executeTool: async (toolCall, context) => {
         const earlier = context.snapshotsThisTurn.find((s) => s.key === 'Lisbon');
         if (earlier) return { payload: earlier.value, snapshot: { value: earlier.value, key: 'Lisbon', reused: true } };
-        const value = { city: String(toolCall.arguments.city), total: 1676 };
+        const value = { city: String(toolCall.arguments.city), total: 1480 };
         return { payload: value, snapshot: { value, key: 'Lisbon' } };
       },
     });
@@ -142,9 +142,9 @@ describe('runTurn', () => {
   });
 
   it('separates text from a later round with a space and keeps text written before a tool call', async () => {
-    const llm = scripted([{ texts: ['Let me check.'], turn: { reply: 'Let me check.', toolCalls: [call('c1', 'Lisbon')] } }, say('It is 1676.00 EUR.')]);
+    const llm = scripted([{ texts: ['Let me check.'], turn: { reply: 'Let me check.', toolCalls: [call('c1', 'Lisbon')] } }, say('It is 1480.00 EUR.')]);
     const { result } = await turn({ llm });
-    expect(result.reply).toBe('Let me check. It is 1676.00 EUR.');
+    expect(result.reply).toBe('Let me check. It is 1480.00 EUR.');
   });
 
   it('answers with the pack text when the model ends without an answer, marked as narrated locally', async () => {
@@ -154,7 +154,7 @@ describe('runTurn', () => {
       limits: { maxToolRounds: 1 },
       pack: pack({ noAnswerReply: (snapshots) => ({ text: `Record: ${snapshots[0]!.value.total}.00 EUR.`, fromToolResults: true }) }),
     });
-    expect(result.reply).toBe('Record: 1676.00 EUR.');
+    expect(result.reply).toBe('Record: 1480.00 EUR.');
     expect(result.metrics?.narratedLocally).toBe(true);
   });
 

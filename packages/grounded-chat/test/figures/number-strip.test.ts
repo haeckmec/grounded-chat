@@ -1,12 +1,12 @@
 import { describe, expect, it } from "vitest";
 import { stripUnauthorizedNumbers } from "../../src/index.js";
 
-const AUTHORIZED = [1325, 321.36, 9.64, 17, 3, 1676.0];
+const AUTHORIZED = [1210, 288.14, 8.64, 17, 3, 1480.0];
 
 describe("stripUnauthorizedNumbers", () => {
   it("passes an authorized snapshot number through unchanged", () => {
-    const result = stripUnauthorizedNumbers("Your annual premium is 1676.00 EUR.", AUTHORIZED);
-    expect(result.text).toBe("Your annual premium is 1676.00 EUR.");
+    const result = stripUnauthorizedNumbers("Your annual price is 1480.00 EUR.", AUTHORIZED);
+    expect(result.text).toBe("Your annual price is 1480.00 EUR.");
     expect(result.redactedAmounts).toEqual([]);
   });
 
@@ -17,19 +17,19 @@ describe("stripUnauthorizedNumbers", () => {
   });
 
   it("still recognises an authorized amount through mangled/thousands-separator formatting", () => {
-    // Same value as the golden 1676.00 case, just with a thousands separator — this
+    // Same value as the golden 1480.00 case, just with a thousands separator — this
     // must NOT be treated as a different, unauthorized number.
-    const result = stripUnauthorizedNumbers("The total comes to 1,676.00 EUR.", AUTHORIZED);
-    expect(result.text).toContain("1,676.00");
+    const result = stripUnauthorizedNumbers("The total comes to 1,480.00 EUR.", AUTHORIZED);
+    expect(result.text).toContain("1,480.00");
     expect(result.redactedAmounts).toEqual([]);
   });
 
   it("does not flag numbers inside words or codes (no currency marker, no two-decimal fraction)", () => {
     const result = stripUnauthorizedNumbers(
-      "Under our COVID-19 policy STUDENT-EXPAT-01, cover applies 24/7.",
+      "Under our COVID-19 policy PLAN-KX-01, cover applies 24/7.",
       AUTHORIZED,
     );
-    expect(result.text).toBe("Under our COVID-19 policy STUDENT-EXPAT-01, cover applies 24/7.");
+    expect(result.text).toBe("Under our COVID-19 policy PLAN-KX-01, cover applies 24/7.");
     expect(result.redactedAmounts).toEqual([]);
   });
 
@@ -40,7 +40,7 @@ describe("stripUnauthorizedNumbers", () => {
     expect(result.text).not.toContain("750.00");
   });
 
-  it("authorizes a benefit limit surfaced via list_benefits, not just quote totals", () => {
+  it("authorizes a benefit limit surfaced via a lookup tool, not just totals", () => {
     const result = stripUnauthorizedNumbers("Private room cover is capped at 80.00 EUR per day.", [80]);
     expect(result.redactedAmounts).toEqual([]);
   });
@@ -60,7 +60,7 @@ describe("stripUnauthorizedNumbers", () => {
   // currency marker used to match none of the guard's alternatives and pass through
   // completely unredacted — exactly the failure mode this guard exists to prevent.
   it("redacts a 4+ digit ungrouped decimal amount with no adjacent currency marker", () => {
-    const result = stripUnauthorizedNumbers("The premium is 1901.50 for this cover.", AUTHORIZED);
+    const result = stripUnauthorizedNumbers("The price is 1901.50 for this cover.", AUTHORIZED);
     expect(result.text).not.toContain("1901.50");
     expect(result.redactedAmounts).toEqual([1901.5]);
   });
@@ -84,14 +84,14 @@ describe("stripUnauthorizedNumbers", () => {
   });
 
   it("redacts an amount written in words, which no figure can authorize", () => {
-    const result = stripUnauthorizedNumbers("That is one thousand six hundred seventy-six euros.", AUTHORIZED);
+    const result = stripUnauthorizedNumbers("That is one thousand four hundred eighty euros.", AUTHORIZED);
     expect(result.text).toBe("That is an amount I can't confirm right now.");
-    expect(result.redactedWords).toEqual(["one thousand six hundred seventy-six euros"]);
+    expect(result.redactedWords).toEqual(["one thousand four hundred eighty euros"]);
   });
 
   it("authorizes a French-formatted amount the snapshot holds, and redacts one it does not", () => {
-    const result = stripUnauthorizedNumbers("Votre prime est de 1 676,00 €, pas 1 500,00 €.", AUTHORIZED);
-    expect(result.text).toBe("Votre prime est de 1 676,00 €, pas an amount I can't confirm right now.");
+    const result = stripUnauthorizedNumbers("Votre prime est de 1 480,00 €, pas 1 500,00 €.", AUTHORIZED);
+    expect(result.text).toBe("Votre prime est de 1 480,00 €, pas an amount I can't confirm right now.");
     expect(result.redactedAmounts).toEqual([1500]);
   });
 

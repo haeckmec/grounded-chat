@@ -28,6 +28,7 @@ export interface RendererContext<L extends string = string> {
 /** Renders one custom message, by the stream event name that carried it. */
 export type MessageRenderer<L extends string = string> = (message: CustomMessageView, context: RendererContext<L>) => ReactNode;
 
+/** Props of `ChatWidget`; `L` is the union of the language codes it offers. */
 export interface ChatWidgetProps<L extends string = string> {
   /** The languages the header offers, in order; the first is the default. */
   languages: readonly L[];

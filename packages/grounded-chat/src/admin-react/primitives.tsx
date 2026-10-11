@@ -64,6 +64,7 @@ export function SaveRow({ onSave, saved, saveError, label = 'Save' }: { onSave: 
   );
 }
 
+/** A config row in a form, as `useConfigPanel` returns it. */
 export interface ConfigPanelState<T> {
   value: T;
   setValue: (value: T) => void;

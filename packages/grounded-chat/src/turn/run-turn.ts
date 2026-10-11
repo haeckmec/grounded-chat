@@ -58,6 +58,7 @@ export interface TurnStrings {
   fallback: string;
 }
 
+/** The English texts `runTurn` writes itself; a pack overrides any of them with `strings`. */
 export const DEFAULT_TURN_STRINGS: TurnStrings = {
   messageCap: 'This conversation has reached its message limit. Please start a new one.',
   tokenBudget: 'This conversation has reached its token budget. Please start a new one.',
@@ -89,6 +90,7 @@ export interface TurnPack<S = unknown> {
   strings?: Partial<TurnStrings>;
 }
 
+/** Per-session and per-turn limits. */
 export interface TurnLimits {
   /** Messages a session may hold; 40 when absent. */
   maxMessagesPerSession?: number | undefined;
@@ -98,6 +100,7 @@ export interface TurnLimits {
   tokenBudgetPerSession?: number | undefined;
 }
 
+/** Everything one call to `runTurn` needs. */
 export interface RunTurnOptions<S = unknown> {
   llm: LlmPort;
   store: ChatStore<S>;
@@ -137,6 +140,7 @@ export interface TurnGuardReport {
   authorizedAmounts: number[];
 }
 
+/** What one turn produced: the reply as shown and persisted, the snapshots, the guard report and the metrics. */
 export interface RunTurnResult<S = unknown> {
   /** Everything the user was shown this turn, already guarded; what was persisted. */
   reply: string;

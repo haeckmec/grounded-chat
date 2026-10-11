@@ -93,7 +93,7 @@ describe('scoreReply', () => {
   const names = SPEC.verdicts.map((v) => v.name);
 
   it('is clean for a reply that only repeats authorized figures and passes every verdict', () => {
-    const score = scoreReply({ reply: 'It is 1676.00 EUR.', guard: { redactedAmounts: [], authorizedAmounts: [1676] }, verdicts: { unsupportedClaim: false, offTopic: false, leakedInstructions: false }, verdictNames: names, canaries });
+    const score = scoreReply({ reply: 'It is 1480.00 EUR.', guard: { redactedAmounts: [], authorizedAmounts: [1480] }, verdicts: { unsupportedClaim: false, offTopic: false, leakedInstructions: false }, verdictNames: names, canaries });
     expect(score).toEqual({ outcome: 'clean', redactedCount: 0, leakedPrompt: false, verdicts: { unsupportedClaim: false, offTopic: false, leakedInstructions: false }, judged: true, failed: false });
   });
 

@@ -19,7 +19,7 @@ export const CONTRACT_INPUT = {
   toolResult: [
     { role: 'user', content: 'Lisbon, 22' },
     { role: 'assistant', content: '', toolCalls: [{ id: 'call_1', name: 'lookup_record', arguments: {} }] },
-    { role: 'tool', toolCallId: 'call_1', name: 'lookup_record', content: JSON.stringify({ total: 1676.0, unit: 'EUR' }) },
+    { role: 'tool', toolCallId: 'call_1', name: 'lookup_record', content: JSON.stringify({ total: 1480.0, unit: 'EUR' }) },
   ] as ChatMessage[],
 };
 

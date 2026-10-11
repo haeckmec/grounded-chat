@@ -10,6 +10,7 @@ export interface EmbedParams<L extends string = string> {
   values: Record<string, string>;
 }
 
+/** Which query parameters an embed page needs besides the origin, theme and language. */
 export interface EmbedParamsSpec<L extends string = string> {
   /** Parameters the embed cannot start without, checked first and in order. */
   required?: readonly string[];

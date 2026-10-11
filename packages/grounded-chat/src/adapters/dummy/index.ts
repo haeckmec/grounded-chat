@@ -7,6 +7,7 @@ import type { ChatMessage, LlmPort, LlmStreamEvent, LlmTurn, ModelOpts, ToolSche
 /** Decides one turn from the conversation, the way a real model would, but deterministically. */
 export type DummyScript = (messages: ChatMessage[], tools: ToolSchema[], opts?: ModelOpts) => LlmTurn | Promise<LlmTurn>;
 
+/** Options for the scripted adapter. */
 export interface DummyLlmOptions {
   /** Characters per streamed delta; small enough by default that figures split across deltas. */
   chunkSize?: number;

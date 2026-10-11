@@ -32,8 +32,8 @@ const TEXT_STREAM = sse([
   { event_type: "step.delta", index: 0, delta: { type: "thought_signature", signature: "sig-thought" } },
   { event_type: "step.stop", index: 0 },
   { event_type: "step.start", index: 1, step: { type: "model_output" } },
-  { event_type: "step.delta", index: 1, delta: { type: "text", text: "Your price is 16" } },
-  { event_type: "step.delta", index: 1, delta: { type: "text", text: "76.00 EUR." } },
+  { event_type: "step.delta", index: 1, delta: { type: "text", text: "Your price is 14" } },
+  { event_type: "step.delta", index: 1, delta: { type: "text", text: "80.00 EUR." } },
   { event_type: "step.stop", index: 1 },
   COMPLETED,
 ]);
@@ -48,7 +48,7 @@ const TOOL_STREAM = sse([
     step: { id: "call_83473", signature: "sig-call", type: "function_call", name: "lookup_record", arguments: {} },
   },
   { event_type: "step.delta", index: 1, delta: { type: "arguments_delta", arguments: '{"age":22,"ci' } },
-  { event_type: "step.delta", index: 1, delta: { type: "arguments_delta", arguments: 'ty":"Singapore"}' } },
+  { event_type: "step.delta", index: 1, delta: { type: "arguments_delta", arguments: 'ty":"Lisbon"}' } },
   { event_type: "step.stop", index: 1 },
   { event_type: "interaction.completed", interaction: { status: "requires_action", usage: { total_tokens: 91 } } },
 ]);
@@ -59,7 +59,7 @@ const TOOL_PLAIN = {
   usage: { total_tokens: 91 },
   steps: [
     { signature: "sig-thought", type: "thought" },
-    { id: "call_83473", signature: "sig-call", type: "function_call", name: "lookup_record", arguments: { age: 22, city: "Singapore" } },
+    { id: "call_83473", signature: "sig-call", type: "function_call", name: "lookup_record", arguments: { age: 22, city: "Lisbon" } },
   ],
 };
 
@@ -215,7 +215,7 @@ describe("GeminiLlmAdapter (against a mocked Interactions API)", () => {
       .reply(200, functionCallResponse("lookup_record", { city: "SG", age: 22 }));
 
     const adapter = new GeminiLlmAdapter({ apiKey: "test-key" });
-    const turn = await adapter.complete([{ role: "user", content: "Singapore, 22, myself, first euro" }], [
+    const turn = await adapter.complete([{ role: "user", content: "Lisbon, 22, please look it up" }], [
       LOOKUP_TOOL,
     ]);
 
@@ -273,18 +273,18 @@ describe("GeminiLlmAdapter (against a mocked Interactions API)", () => {
           return true;
         },
       })
-      .reply(200, textResponse("Your price is 1676.00 EUR."));
+      .reply(200, textResponse("Your price is 1480.00 EUR."));
 
     const adapter = new GeminiLlmAdapter({ apiKey: "test-key" });
     const messages: ChatMessage[] = [
-      { role: "user", content: "Singapore, 22, myself, first euro" },
+      { role: "user", content: "Lisbon, 22, please look it up" },
       {
         role: "assistant",
         content: "",
         toolCalls: [{ id: "call_abc", name: "lookup_record", arguments: { age: 22 } }],
         providerState: [thoughtStep, functionCallStep],
       },
-      { role: "tool", toolCallId: "call_abc", name: "lookup_record", content: JSON.stringify({ total: 1676.0 }) },
+      { role: "tool", toolCallId: "call_abc", name: "lookup_record", content: JSON.stringify({ total: 1480.0 }) },
     ];
     await adapter.complete(messages, [LOOKUP_TOOL]);
 
@@ -297,7 +297,7 @@ describe("GeminiLlmAdapter (against a mocked Interactions API)", () => {
       type: "function_result",
       name: "lookup_record",
       call_id: "call_abc",
-      result: [{ type: "text", text: JSON.stringify({ total: 1676.0 }) }],
+      result: [{ type: "text", text: JSON.stringify({ total: 1480.0 }) }],
     });
   });
 
@@ -313,13 +313,13 @@ describe("GeminiLlmAdapter (against a mocked Interactions API)", () => {
           return true;
         },
       })
-      .reply(200, textResponse("Your price is 1676.00 EUR."));
+      .reply(200, textResponse("Your price is 1480.00 EUR."));
 
     const adapter = new GeminiLlmAdapter({ apiKey: "test-key" });
     const messages: ChatMessage[] = [
-      { role: "user", content: "Singapore, 22, myself, first euro" },
+      { role: "user", content: "Lisbon, 22, please look it up" },
       { role: "assistant", content: "", toolCalls: [{ id: "call_1", name: "lookup_record", arguments: { age: 22 } }] },
-      { role: "tool", toolCallId: "call_1", name: "lookup_record", content: JSON.stringify({ total: 1676.0 }) },
+      { role: "tool", toolCallId: "call_1", name: "lookup_record", content: JSON.stringify({ total: 1480.0 }) },
     ];
     await adapter.complete(messages, [LOOKUP_TOOL]);
 
@@ -329,7 +329,7 @@ describe("GeminiLlmAdapter (against a mocked Interactions API)", () => {
       type: "function_result",
       name: "lookup_record",
       call_id: "call_1",
-      result: [{ type: "text", text: JSON.stringify({ total: 1676.0 }) }],
+      result: [{ type: "text", text: JSON.stringify({ total: 1480.0 }) }],
     });
   });
 
@@ -351,7 +351,7 @@ describe("GeminiLlmAdapter (against a mocked Interactions API)", () => {
     const messages: ChatMessage[] = [
       { role: "user", content: "hi" },
       { role: "assistant", content: "Which country will you be studying in?" },
-      { role: "user", content: "Singapore" },
+      { role: "user", content: "Lisbon" },
     ];
     await adapter.complete(messages, []);
 
@@ -402,8 +402,8 @@ describe("GeminiLlmAdapter (against a mocked Interactions API)", () => {
 
     const { texts, turn } = await collect(new GeminiLlmAdapter({ apiKey: "test-key" }).stream([{ role: "user", content: "hi" }], []));
     expect(JSON.parse(capturedBody ?? "{}").stream).toBe(true);
-    expect(texts).toEqual(["Your price is 16", "76.00 EUR."]);
-    expect(turn).toEqual({ reply: "Your price is 1676.00 EUR.", toolCalls: undefined, tokensUsed: 84, providerState: undefined });
+    expect(texts).toEqual(["Your price is 14", "80.00 EUR."]);
+    expect(turn).toEqual({ reply: "Your price is 1480.00 EUR.", toolCalls: undefined, tokensUsed: 84, providerState: undefined });
   });
 
   it("reassembles a streamed tool call into exactly the steps a non-streamed response carries", async () => {
@@ -412,13 +412,13 @@ describe("GeminiLlmAdapter (against a mocked Interactions API)", () => {
     pool.intercept({ path: "/v1beta/interactions", method: "POST" }).reply(200, TOOL_PLAIN);
 
     const adapter = new GeminiLlmAdapter({ apiKey: "test-key" });
-    const messages: ChatMessage[] = [{ role: "user", content: "Quote me for Singapore, age 22" }];
+    const messages: ChatMessage[] = [{ role: "user", content: "Look up Lisbon, age 22" }];
     const streamed = await collect(adapter.stream(messages, [LOOKUP_TOOL]));
     const plain = await adapter.complete(messages, [LOOKUP_TOOL]);
 
     expect(streamed.texts).toEqual([]);
     expect(streamed.turn).toEqual(plain);
-    expect(streamed.turn?.toolCalls).toEqual([{ id: "call_83473", name: "lookup_record", arguments: { age: 22, city: "Singapore" } }]);
+    expect(streamed.turn?.toolCalls).toEqual([{ id: "call_83473", name: "lookup_record", arguments: { age: 22, city: "Lisbon" } }]);
   });
 
   it("throws an LlmProviderError with the mapped status when the stream reports an error", async () => {
@@ -530,7 +530,7 @@ describe("GeminiLlmAdapter stream read from awkward network chunks", () => {
   });
 
   it("reassembles events split mid-line and mid-character", async () => {
-    const bytes = new TextEncoder().encode(TEXT_STREAM.replace("76.00 EUR.", "76,00 € é."));
+    const bytes = new TextEncoder().encode(TEXT_STREAM.replace("80.00 EUR.", "80,00 € é."));
     vi.stubGlobal(
       "fetch",
       vi.fn(async () => {
@@ -548,7 +548,7 @@ describe("GeminiLlmAdapter stream read from awkward network chunks", () => {
     );
 
     const { texts, turn } = await collect(new GeminiLlmAdapter({ apiKey: "test-key" }).stream([{ role: "user", content: "hi" }], []));
-    expect(texts.join("")).toBe("Your price is 1676,00 € é.");
-    expect(turn?.reply).toBe("Your price is 1676,00 € é.");
+    expect(texts.join("")).toBe("Your price is 1480,00 € é.");
+    expect(turn?.reply).toBe("Your price is 1480,00 € é.");
   });
 });

@@ -1,14 +1,14 @@
 import { describe, expect, it } from "vitest";
 import { findLeaks, hasLeak } from "../../src/index.js";
 
-const authorized = [1676, 1500.5, 120];
+const authorized = [1480, 1500.5, 120];
 
 describe("findLeaks", () => {
   it("passes a reply that only repeats returned amounts, in any of the usual formats", () => {
     for (const reply of [
-      "Your indicative annual premium is 1676.00 EUR.",
-      "That is 1,676.00 euros a year, or 1676 in round figures.",
-      "Votre prime est de 1 676,00 EUR.",
+      "Your indicative annual price is 1480.00 EUR.",
+      "That is 1,480.00 euros a year, or 1480 in round figures.",
+      "Votre prime est de 1 480,00 EUR.",
       "The fee is 120.00 EUR and healthcare is 1500.50 EUR.",
     ]) {
       expect(hasLeak(findLeaks(reply, authorized)), reply).toBe(false);

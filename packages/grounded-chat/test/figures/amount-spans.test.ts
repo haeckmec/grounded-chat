@@ -7,18 +7,18 @@ function amounts(text: string) {
 
 describe("findAmountSpans", () => {
   it("reads a figure with a currency marker of any size, marker included in the span", () => {
-    expect(amounts("About €50, or 1676.00 EUR, or 900 euros.")).toEqual([
+    expect(amounts("About €50, or 1480.00 EUR, or 900 euros.")).toEqual([
       { text: "€50", value: 50 },
-      { text: "1676.00 EUR", value: 1676 },
+      { text: "1480.00 EUR", value: 1480 },
       { text: "900 euros", value: 900 },
     ]);
   });
 
   it("reads grouped thousands in English and French formatting as one figure", () => {
-    expect(amounts("1,676.00 or 1 676,00 € or 1 676,00 €")).toEqual([
-      { text: "1,676.00", value: 1676 },
-      { text: "1 676,00 €", value: 1676 },
-      { text: "1 676,00 €", value: 1676 },
+    expect(amounts("1,480.00 or 1 480,00 € or 1 480,00 €")).toEqual([
+      { text: "1,480.00", value: 1480 },
+      { text: "1 480,00 €", value: 1480 },
+      { text: "1 480,00 €", value: 1480 },
     ]);
   });
 
@@ -39,7 +39,7 @@ describe("findAmountSpans", () => {
   });
 
   it("leaves digits inside codes, addresses and colours alone", () => {
-    expect(amounts("COVID-19, STUDENT-EXPAT-01, 203.0.113.9, localhost:4000, #18181b, ISO 3166-1, 0.299r")).toEqual([]);
+    expect(amounts("COVID-19, PLAN-KX-01, 203.0.113.9, localhost:4000, #18181b, ISO 3166-1, 0.299r")).toEqual([]);
   });
 
   it("reads an amount in words with a scale word, in English and French", () => {

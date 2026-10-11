@@ -20,16 +20,16 @@ const points: FigureClass = {
 
 describe('figure classes', () => {
   it('money is the default class: the guard with no options and with money explicitly agree', () => {
-    const reply = 'It is 1676.00 EUR, or about 1700 for the year, or two thousand euros.';
-    expect(stripUnauthorizedNumbers(reply, [1676])).toEqual(stripUnauthorizedNumbers(reply, [1676], { figureClass: moneyFigures }));
+    const reply = 'It is 1480.00 EUR, or about 1700 for the year, or two thousand euros.';
+    expect(stripUnauthorizedNumbers(reply, [1480])).toEqual(stripUnauthorizedNumbers(reply, [1480], { figureClass: moneyFigures }));
     expect(moneyFigures.id).toBe('money');
     expect(moneyFigures.normalize(10.005)).toBe(10.01);
   });
 
   it('every guard function reads figures through the class it is given', () => {
-    const reply = 'You scored 40 pts, not 1676.00 EUR.';
+    const reply = 'You scored 40 pts, not 1480.00 EUR.';
     expect(stripUnauthorizedNumbers(reply, [], { figureClass: points }).text).toBe(
-      `You scored ${DEFAULT_REPLACEMENTS.en}, not 1676.00 EUR.`,
+      `You scored ${DEFAULT_REPLACEMENTS.en}, not 1480.00 EUR.`,
     );
     expect(findLeaks(reply, [40], { figureClass: points })).toEqual({ amounts: [], words: [] });
     const guard = new StreamingNumberGuard([], { figureClass: points });

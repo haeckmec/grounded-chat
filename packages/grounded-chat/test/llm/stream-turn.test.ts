@@ -17,7 +17,7 @@ describe("streamTurn", () => {
   });
 
   it("sends no text delta for a turn that only calls tools", async () => {
-    const toolCalls = [{ id: "call_1", name: "get_quote", arguments: {} }];
+    const toolCalls = [{ id: "call_1", name: "lookup_record", arguments: {} }];
     const port: LlmPort = { complete: async () => ({ toolCalls }) };
     expect(await collect(streamTurn(port, [], []))).toEqual([{ type: "done", turn: { toolCalls } }]);
   });

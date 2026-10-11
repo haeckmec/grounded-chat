@@ -29,6 +29,7 @@ export interface ConversationConfig<L extends string = 'en' | 'fr'> {
   humanHandoffText: LocalizedText<L>;
 }
 
+/** The Conversation tab's labels and help texts. */
 export interface ConversationPanelCopy {
   editingFor: string;
   reset: string;
@@ -39,6 +40,7 @@ export interface ConversationPanelCopy {
   humanHandoffText: FieldCopy;
 }
 
+/** Generic English labels and help for the Conversation tab; a pack passes its own wording. */
 export const DEFAULT_CONVERSATION_COPY: ConversationPanelCopy = {
   editingFor: 'Editing text for:',
   reset: 'Reset to suggested text',
@@ -283,6 +285,7 @@ export interface ToggleSpec {
   help?: string;
 }
 
+/** The config row the compliance and theme tab edits: retention, theme, and the pack's own fields. */
 export interface ThemePanelConfig {
   [key: string]: unknown;
   retentionDays: number;
@@ -448,6 +451,7 @@ export interface TranscriptMessage {
   createdAt: string;
 }
 
+/** A transcript while it loads, once loaded, or after a failed load. */
 export type TranscriptState = { status: 'loading' } | { status: 'loaded'; messages: TranscriptMessage[] } | { status: 'error' };
 
 /** Loads one session's transcript from the `/admin` transcript handler. */

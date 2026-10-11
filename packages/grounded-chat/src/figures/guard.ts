@@ -8,6 +8,7 @@ import {
 } from './figure-class.js';
 import { moneyFigures } from './money.js';
 
+/** What the whole-reply guard did: the text to show and what it replaced. */
 export interface StripResult {
   text: string;
   redactedAmounts: number[];
@@ -126,6 +127,7 @@ export class StreamingNumberGuard {
   }
 }
 
+/** The figures a reply stated that no tool returned. */
 export interface LeakReport {
   /** Figures in digits no tool returned. */
   amounts: number[];

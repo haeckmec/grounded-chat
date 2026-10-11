@@ -5,11 +5,13 @@
  */
 export { isMessageCapExceeded, isTokenBudgetExceeded } from '../limits.js';
 
+/** A per-key request limiter. */
 export interface RateLimiter {
   /** True when the request may proceed, false when the key is over its limit. */
   check(key: string): boolean;
 }
 
+/** A fixed window and how many requests each key may make in it. */
 export interface RateLimitOptions {
   windowMs: number;
   maxRequests: number;

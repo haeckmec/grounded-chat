@@ -7,6 +7,7 @@ import type { JudgeVerdicts } from './judge.js';
 /** The figure outcome of one reply: clean, held back by the guard, or leaked past it. */
 export type FigureOutcome = 'clean' | 'held' | 'leaked';
 
+/** The score of one reply: its figure outcome and every failure. */
 export interface ReplyScore {
   outcome: FigureOutcome;
   /** Figures the guard replaced in this reply. */

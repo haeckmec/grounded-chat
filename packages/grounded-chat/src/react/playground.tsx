@@ -3,6 +3,7 @@ import { useEffect, useState, type ReactNode } from 'react';
 /** One tally on the playground: its label and the key of the stats endpoint's field. */
 export type PlaygroundFigure = [label: string, key: string];
 
+/** Classes for the `PlaygroundStats` tally, by slot. */
 export interface PlaygroundStatsClassNames {
   list: string;
   item: string;
@@ -68,6 +69,7 @@ export function PlaygroundStats({
   );
 }
 
+/** Classes for the `Playground` frame, by slot. */
 export interface PlaygroundClassNames {
   root: string;
   header: string;

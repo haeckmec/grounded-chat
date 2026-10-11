@@ -14,6 +14,7 @@ export interface WidgetStrings {
   rateLimitMessage: string;
 }
 
+/** The English interface text; `FRENCH_WIDGET_STRINGS` is the French. */
 export const DEFAULT_WIDGET_STRINGS: WidgetStrings = {
   title: 'Assistant',
   placeholder: 'Type a message…',
