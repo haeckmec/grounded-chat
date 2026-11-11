@@ -1,11 +1,11 @@
 # Consumer notes
 
-## Quoteproof (`apps/chatbot` in northstar-react)
+## Example: a quote assistant
 
-The quote pack. It runs every layer: `runTurn` with its `get_quote`/`list_benefits` executors and household figure rule, `QUOTE_INTAKE_PLAN`, its own `JudgeSpec` wording, the widget with its Tailwind classes in the slots and the quote card as a renderer, the admin handlers behind its basic-auth check, and three of the admin panels. Data source and Leads stay in the pack.
+A quote assistant pack that runs every layer: `runTurn` with its own tool executors and a money figure rule, an intake plan, its own `JudgeSpec` wording, the widget with its own classes in the slots and the quote card as a renderer, the admin handlers behind a basic-auth check, and some of the admin panels. The data source stays in the pack.
 
-- Install: a vendored tarball in `apps/chatbot/vendor` until a session with a `read:packages` token switches it to the exact registry pin (gap G-1).
-- Proof it did not move: golden transcripts (every request, delta and result of eight conversations) and a golden of the judge's requests, both byte for byte; 11 screens byte-identical to the baseline taken before any code moved; its Playwright suite.
+- Install: the exact registry pin, or a packed tarball until a token with `read:packages` is available.
+- Proof it did not change: golden transcripts (every request, delta and result of a set of conversations) and a golden of the judge's requests, both byte for byte; screens byte-identical to a baseline taken before any code moved; the app's own end-to-end suite.
 
 ## Jan's Back Bar ("Ask Jan", M3)
 
