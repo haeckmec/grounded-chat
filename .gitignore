@@ -14,3 +14,7 @@ test-results/
 .env.*.local
 .DS_Store
 .claude/settings.local.json
+
+# Working notes stay local
+_reference/
+CLAUDE.md
