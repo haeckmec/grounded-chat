@@ -24,6 +24,17 @@ describe('measureFigures', () => {
     ]);
   });
 
+  it('reads ounces to the eighth', () => {
+    expect(read('Pour 1⅝ oz, ⅜ oz, 2 ⅞ oz and ⅛ oz.')).toEqual([
+      ['1⅝ oz', 1.63],
+      ['⅜ oz', 0.38],
+      ['2 ⅞ oz', 2.88],
+      ['⅛ oz', 0.13],
+    ]);
+    // A made-up eighth is caught like any other measure.
+    expect(stripUnauthorizedNumbers('Use 1⅞ oz rye.', [1.5], guard).text).toBe("Use an amount I can't confirm right now rye.");
+  });
+
   it('leaves numbers without a unit and units inside words alone', () => {
     expect(read('Serve 2 glasses in 1987 to table 12, with 5 lemons, a part of the method, ref QX-7731.')).toEqual([]);
     expect(read('Use 10 mlx or 3 ozone.')).toEqual([]);
@@ -43,7 +54,7 @@ describe('measureFigures', () => {
   });
 
   it('holds units and number words while they may still form a measure', () => {
-    for (const word of ['45', 'ml', 'dashes', 'two', '½', '40%', 'abv']) expect(measureFigures.couldBePartOfFigure(word)).toBe(true);
+    for (const word of ['45', 'ml', 'dashes', 'two', '½', '⅝', '1⅞', '40%', 'abv']) expect(measureFigures.couldBePartOfFigure(word)).toBe(true);
     expect(measureFigures.couldBePartOfFigure('lemon')).toBe(false);
     expect(measureFigures.normalize(0.755)).toBe(0.76);
   });
@@ -55,8 +66,9 @@ describe('measureFigures streaming parity', () => {
     'Shake 1½ oz with ¾ oz, top with two parts soda to one part, 40% ABV.',
     'A spec I cannot back: 60 ml and 3 drops, or 1-2 oz, or half tsp.',
     'No measures here, only 12 glasses and the year 1987.',
+    'In ounces: 1⅝ oz rye, ⅜ oz syrup and a made-up 2⅞ oz.',
   ];
-  const AUTHORIZED = [45, 30, 2, 1.5, 0.75, 40];
+  const AUTHORIZED = [45, 30, 2, 1.5, 0.75, 40, 1.63, 0.38];
 
   for (const reply of REPLIES) {
     it(`matches the whole-reply guard at every cut: ${reply.slice(0, 30)}…`, () => {
