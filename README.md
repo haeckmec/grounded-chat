@@ -45,8 +45,6 @@ npx turbo run typecheck lint build test
 npm run check:packed   # the example on the packed tarball, as an outside app installs it
 ```
 
-`CLAUDE.md` holds the repo rules.
-
 ## License
 
 UNLICENSED. All rights reserved. See [LICENSE](LICENSE).
