@@ -3,10 +3,10 @@
 Paste-ready start for a build session. Read `CLAUDE.md`, `_reference/methodology.md` and `_reference/architecture.md` first. This file owns K progress; northstar-react's resume block only points here.
 
 <resume_status>
-Batch: none. K0 to K7 built 2026-10-11 and merged to main (ac48938)
-Gate: closed. 0.1.0 published 2026-10-11: v0.1.0 tagged at ac48938, release.yml run 38145585303 green, package listed under GitHub Packages
-Last closed: K7 (measure figures, grounded-kb example on the packed tarball, API review, docs, 0.1.0)
-Next: nothing open. G-1 to G-4 closed in northstar-react (master d57fb92, production on the registry pin). Back-bar M3 may start on 0.1.0; the next SDK change starts with a changeset and asks Jan before the tag
+Batch: K8 (judge reasons), first batch of release 0.2 "Eval ops"
+Gate: not started. Plan agreed 2026-11-11, see `plan.md`, "Eval roadmap: 0.2 to 0.4"
+Last closed: K7 (0.1.0, 2026-10-11)
+Next: K8, then K9 to K11 and R0.2 in the week of 24 Nov; ask Jan before the v0.2.0 tag
 </resume_status>
 
 ## Where each batch runs
@@ -49,6 +49,15 @@ Locally, `npm install` in northstar-react needs the token too: a user env var `N
 | K5 | `/client`, `/react` chat UI | Chatbot e2e green; screenshots match the K0 baseline | Done, 0.0.6 |
 | K6 | `/admin`, `/admin-react` | Refusal test per handler; screenshots match the baseline | Done, 0.0.7 |
 | K7 | `measure`, `examples/grounded-kb`, quickstart, API review, `0.1.0` | Example runs on the packed tarball; every export documented and tested; no APRIL data | Done, 0.1.0 |
+| K8 | Judge reasons kept (`runJudgeDetailed`) | Existing judge tests unchanged; reasonless replies parse | Planned, 0.2 |
+| K9 | Agreement rates, kappa, `lowSupport` | Hand-computed fixtures match | Planned, 0.2 |
+| K10 | Live sampling, `SampleStore` port, `fallbackLlm` | Contract cases pass; failures stored ungraded | Planned, 0.2 |
+| K11 | Failure report, rule grader port, `assertThresholds`; release 0.2.0 | Rule grader passes the judge parser; grounded-kb rule-graded eval | Planned, 0.2 |
+| K12 | `EvalRun` results format, hashes | Stable hashes | Planned, 0.3 |
+| K13 | `runScenarios` through `runTurn` | Byte-identical on the dummy adapter | Planned, 0.3 |
+| K14 | Trials, pass^k, held-out split; release 0.3.0 | pass^k and split tests | Planned, 0.3 |
+| K15 | Second model family adapter, `compareGraders` | Port contract on a stubbed fetch; no real calls in tests | Planned, 0.4 (family is Jan's call) |
+| K16 | Transcript to eval item, red-team set; release 0.4.0 | Red-team set runs in grounded-kb on the dummy adapter | Planned, 0.4 |
 
 ## How to run a gate
 
