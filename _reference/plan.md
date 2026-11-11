@@ -1,4 +1,4 @@
-# Grounded chat SDK plan (K0 to K7)
+# Grounded chat SDK plan (K0 to K16)
 
 The spec for this repo. Written in northstar-react (`_reference/General/grounded-chat-sdk-plan.md`) on 2026-10-10 and kept here as the source of truth; later changes happen in this file only. Decisions taken since are in `decisions.md` (D-10 onwards) and noted inline.
 
@@ -9,6 +9,7 @@ The spec for this repo. Written in northstar-react (`_reference/General/grounded
 | K0, SDK half | Done 2026-10-10: repo, build, lint rules with tests, exports map, changesets, CI and release workflows, docs. `0.0.1` published by release.yml; a scratch install with a read:packages token resolved all 9 subpaths at runtime and in types |
 | K0, northstar-react half | Done 2026-10-11: vendored tarball (D-17, G-1 waits for the registry pin), Vercel preview READY, 11-screen baseline |
 | K1 to K7 | Done 2026-10-11 in one unattended run; 0.1.0. Detail in `build-history.md` |
+| K8 to K16 | Planned 2026-11-11: eval releases 0.2 to 0.4, see "Eval roadmap" below. Not started |
 
 The resume position lives in `execution-prompt.md`.
 
@@ -138,6 +139,73 @@ Done on 2026-10-10, branch `claude/grounded-chat-sdk-hint` of `haeckmec/jans-bac
 - `CLAUDE.md`: the candidate playbooks `grounded-chat.md` and `ports-and-mocks.md` point at the SDK and `examples/grounded-kb` instead of `quote-chatbot-standalone/src/server/guards`.
 
 K7 refreshes that note with the real export names once the API review settles them.
+
+## Eval roadmap: 0.2 to 0.4 (K8 to K16)
+
+Agreed with Jan on 2026-11-11, after an audit of the SDK against standard eval practice (claude.ai doc "Grounded chat SDK and evals", section "SDK eval audit"). The judge already lives here; what Jan's Back Bar built around it (live sampling, a failure report, a rule grader for CI) moves in, then the gaps the audit found close in 2 more minor releases. Every release is additive: no export is renamed or removed (non-negotiable 4), so consumers move by bumping their exact pin.
+
+### Why, in one line per release
+
+| Release | Closes | Who needs it first |
+| --- | --- | --- |
+| **0.2 "Eval ops"** | Judge reasons thrown away; agreement without rates or kappa; live sampling and failure report only in Back Bar; no rule grader or CI threshold in the SDK | The portfolio's Ask Jan: badge and live grading before its dry run on **6 Dec** |
+| **0.3 "Scenario evals"** | No end-to-end runner through `runTurn`; one run per item; no results format; no held-out split | The portfolio's eval playground (recorded runs), Quoteproof's regression gate |
+| **0.4 "Independence"** | Gemini is the only grader family; no path from transcripts to labelled items; no red-team set | Every consumer; can wait until January |
+
+### Batches
+
+Each batch is one session in this repo, gated by `npx turbo run typecheck lint build test`, with tests for every new export, a doc comment on each (rule 6) and the grounded-kb example using it. Effort in hours of Claude Code time.
+
+| Batch | Release | What | New or changed exports | Gate criteria | Effort |
+| --- | --- | --- | --- | --- | --- |
+| **K8** | 0.2 | Judge reasons. The parser keeps the one-sentence reason the judge already returns, per verdict | `runJudgeDetailed()` returning `{ verdicts, reasons } \| null`; `parseJudgeReplyDetailed()`; type `JudgeResult`. `runJudge` and `parseJudgeReply` unchanged | Existing judge tests unchanged; a reply without reasons parses to empty reasons, never to null | 1 h |
+| **K9** | 0.2 | Agreement statistics | `AgreementReport` gains per verdict `truePositiveRate`, `trueNegativeRate`, `kappa` (Cohen's) and `lowSupport` (true when a verdict has fewer than `minFailing` labelled failures, default 5) | Rates and kappa match hand-computed fixtures, including the all-pass and all-fail edge cases (kappa undefined, reported as null) | 1 to 1.5 h |
+| **K10** | 0.2 | Live sampling, lifted from Back Bar `judge-sample.ts` and renamed domain-free | `createJudgeSampler({ rate, random, judge, store })` returning `maybeGrade(turn)`; port `SampleStore` (`save`, `list`); `inMemorySampleStore()`; `sampleStoreContractCases()` (framework-free, D-20); `fallbackLlm([ports])` that moves to the next port on 429 or 503 | Rate 0 never calls the judge; rate 1 always does; a judge failure stores an ungraded sample, never a pass; contract cases pass on the in-memory store; no `env`, `fetch` or `fs` (the host reads its rate from env) | 2 h |
+| **K11** | 0.2 | Failure report, rule grader, CI threshold | `failuresByVerdict(samples)` (from Back Bar `judge-report.ts`); `ruleGraderPort(rules)`, an `LlmPort` that answers in the judge's JSON from rule functions, so CI runs the whole judge path without a model; `assertThresholds(report, { minAgreement, maxFailureRate, verdicts? })` that throws one readable message listing every breach | Rule grader passes the judge's own schema parser; thresholds fail on a crafted report and pass on a clean one; grounded-kb runs a rule-graded eval in its test | 2 h |
+| **R0.2** | 0.2 | Release | Changeset (minor, "additive: eval ops"), API review of the new exports, docs page `docs/evals.md` (sampling, report, rule grader, thresholds). Ask Jan, then tag `v0.2.0` | Packed tarball installs in grounded-kb; release.yml green | 0.5 h |
+| **K12** | 0.3 | Results format | `EvalRun` type and `createEvalRun()`: run id, date, SDK version, model ids, prompt hash, dataset hash, per-item results and grades; `hashText()` on Web Crypto (allowed in the core: no `fetch`, `env` or `fs`). Serialising stays pure; hosts write the file | Two runs of the same inputs give the same hashes; a changed prompt changes the prompt hash only | 1.5 h |
+| **K13** | 0.3 | Scenario runner | `runScenarios({ scenarios, makeTurn, judge?, trials })`: scripted user turns through `runTurn` on any `LlmPort`, each reply scored with `scoreReply` and, when given, the judge; returns an `EvalRun`. Type `Scenario` (turns, expected verdicts, tags) | On the dummy adapter the run is byte-identical across 2 runs; a scenario with a leaked figure is scored "held" | 3 to 4 h |
+| **K14** | 0.3 | Repeated trials and splits | `trials: k` on `runScenarios`; per scenario `passAtK` and `passPowK` (passes every time); `splitItems(items, { heldOut, seed })`, deterministic by hashed id; `agreement` reported per split | pass^k is 1 only when every trial passes; the split is stable across runs and machines | 2 h |
+| **R0.3** | 0.3 | Release | Changeset, docs (`docs/evals.md`: scenarios, trials, splits, results file), ask Jan, tag `v0.3.0` | As R0.2 | 0.5 h |
+| **K15** | 0.4 | Second model family | New adapter subpath (`./adapters/anthropic` if Jan confirms the family; lifts D-9) in `subpaths.ts`, `exports` and the subpaths test in one commit (rule 12); key from env only; its real-model script refuses under `CI` or `VERCEL`. `compareGraders(a, b, items)` returns agreement between 2 graders | `llmPortContractCases()` pass on the new adapter with a stubbed fetch; no test calls a real endpoint | 2 to 3 h |
+| **K16** | 0.4 | Error analysis and red team | `transcriptToEvalItem(transcript, labels)` from a `ChatStore` transcript; docs page on the loop (read 20 to 50 transcripts, note the first failure, group, label); a synthetic red-team set in `examples/grounded-kb` (prompt injection, instruction leaks, figure baiting, off-topic pressure) with expected verdicts | The red-team set runs through `runScenarios` on the dummy adapter in the example's test; no real data in fixtures (rule 3) | 2 to 3 h |
+| **R0.4** | 0.4 | Release | Changeset, docs, ask Jan, tag `v0.4.0` | As R0.2 | 0.5 h |
+
+Totals: 0.2 about 6.5 to 7 h, 0.3 about 7 to 8 h, 0.4 about 5 to 6.5 h.
+
+### Order and dates
+
+- **0.2 first, in the week of 24 Nov**, as 2 evening sessions (K8 and K9, then K10, K11 and R0.2). The portfolio's Ask Jan needs it before its dry run on 6 Dec.
+- **0.3 after the portfolio's soft launch (14 Dec)**, unless the eval playground is pulled forward. Until then the playground runs from recorded files written by a host script, as Back Bar does today.
+- **0.4 in January.**
+- **Risk:** 0.2 lands in the same weeks as the portfolio shell build (21 Nov to 5 Dec). Fallback: ship K8 to K10 as 0.2.0 and move K11 to 0.2.1; the portfolio can gate CI on its own threshold check for 2 weeks.
+
+### Consumer adoption (in their own repos, after each release)
+
+| Consumer | After | Change | Proof |
+| --- | --- | --- | --- |
+| jans-back-bar | 0.2 | Replace `server/ask-jan/judge-sample.ts`, `judge-report.ts` and the rule-grader plumbing with the SDK exports; `judge_samples` becomes its `SampleStore`; bar words stay in the pack | Its judge tests unchanged; live sampling still writes one turn in ten |
+| northstar-react (Quoteproof) | 0.2 | Live sampling on the chatbot; the 120-verdict set stays the regression gate, now through `assertThresholds` | 120 of 120 unchanged |
+| portfolio (Ask Jan) | 0.2, then 0.3 | Ask Jan on the SDK from the start; its 50-question set and `/eval` runner replace promptfoo; verdicts: the 3 defaults plus `jobSearchSignal`, `confidentialDetail`, `uncited`, `wrongLanguage`; grade every live turn while traffic is low; the eval playground reads `EvalRun` files from 0.3 | "Passed N of 50" badge from a recorded run |
+
+### Not built in 0.2 to 0.4
+
+- An admin panel for samples (`admin-react` judge tab). Back Bar keeps its own until a second consumer asks; candidate for 0.5.
+- A CLI or hosted dashboard (D-24 stands: library functions only).
+- Automatic relabelling: a judge disagreement is investigated, never relabelled.
+
+### Risks
+
+- **Bar words leak in with the lifted code** (likely, since the sources come from Back Bar). The domain-word lint fails the gate; K10 and K11 include a rename pass.
+- **Kappa misread on tiny sets.** Back Bar has about 30 failing labels across 8 verdicts. `lowSupport` flags any verdict under 5 failures, and docs say so.
+- **A breaking change slips in.** Every change adds; the API review in each release checks for removed or renamed exports.
+- **Free-tier quotas** slow real-model runs. Real runs stay scripts outside CI; the rule grader keeps CI model-free.
+
+### Decision gates for Jan
+
+- The second model family for K15 (Claude, which lifts D-9, or another) and who pays for its key.
+- Each tag (`v0.2.0`, `v0.3.0`, `v0.4.0`): publishing is outward.
+- Pulling 0.3 forward before 14 Dec, if the portfolio's eval playground needs live recorded runs at the soft launch.
 
 ## What Jan does
 
